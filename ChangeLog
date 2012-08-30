@@ -1,0 +1,23 @@
+Version 1.0-2
+-------------
+Run time of tests reduced. 
+
+Version 1.0-1
+-------------
+
+_SAMPLER_
+
+- thinning now implemented in sampler.
+- mcmc objects output by sampler now contain start, end and thin values to match 'burn.in', 'n.iter' and 'thin.by' arguments.
+- Created migration storage object twice (once for proportions, once for counts) but these were identical. Removed this.
+
+
+_VIGNETTE_
+
+- vignette modified so chain is of length 5E4, thinned by 50. Stored output is less than 5MB. LEB and total net number of migrants now calculated on the fly by vignette since the output is now very small. .RData files for these two parameters no longer produced--deleted. 
+
+
+_DATA SETS_
+
+- Updates to the sampler and the CCMPP function require migration proportion inputs to be average ANNUAL proportions, not 5-year proportions. 
+- Tests being run with migration proportions divided by five to see if original results are reproduced.
