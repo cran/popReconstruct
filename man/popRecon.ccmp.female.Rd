@@ -9,7 +9,8 @@ Implements the deterministic female dominant cohort component method of
 population projection.
 }
 \usage{
-popRecon.ccmp.female(pop, surv, fert, srb = 1.05, mig, proj.steps, age.int = 5, label.dims = FALSE, base.year = "1960")
+popRecon.ccmp.female(pop, surv, fert, srb = 1.05,
+mig, proj.steps, age.int = 5, label.dims = FALSE, base.year = "1960")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -51,9 +52,9 @@ Baseline year for popualtion projections (aesthetic).
 survival for age.int years in the open interval.
 
 The elements of the \code{fert} argument should not be multiplied by
-  \code{age.int}.  In other words, the average annual total fertility rates (\acronym{TFR}s)
-  corresponding to the columns of \code{fert} are \code{age.int *
-    colSums(fert)}.
+  \code{age.int}.  In other words, the average annual total fertility
+  rates (\acronym{TFR}s) corresponding to the columns of \code{fert} are
+  \code{age.int * colSums(fert)}.
 
   The elements of \code{mig} give the average annual net number of
   migrants, as proportion of the size of the same age-group in the

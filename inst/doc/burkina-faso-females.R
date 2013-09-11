@@ -1,74 +1,9 @@
-\documentclass[11pt,letterpaper]{article}
-\title{Reconstructing the Female Population of Burkina Faso, 1960--2005}
-\author{Mark C.\ Wheldon}
+### R code from vignette source 'burkina-faso-females.Rnw'
+### Encoding: UTF-8
 
-
-%\VignetteIndexEntry{Burkina Faso Females Reconstruction}
-%\VignetteDepends{coda, reshape, ggplot2, gdata}
-
-
-\usepackage{amsmath}
-\usepackage[margin=1in]{geometry}
-
-%% Encoding
-\usepackage[utf8]{inputenc}
-
-%% Format captions better
-\usepackage[margin=10pt,font=small,labelfont=bf,labelsep=period]{caption}
-
-%% Hyperref
-\usepackage[hyperref,table,fixpdftex,svgnames]{xcolor}
-\usepackage[pdftex,bookmarks,colorlinks,allcolors=DarkBlue]{hyperref}
-
-%% Bibliography
-\usepackage[round,longnamesfirst]{natbib}
-%\renewcommand{\bibsection}{\section*{REFERENCES}}
-\bibpunct{(}{)}{;}{a}{}{,}
-\citestyle{agsm}
-\bibliographystyle{apa}
-
-%% Sweave
-\usepackage[nogin,noae]{Sweave}
-\SweaveOpts{keep.source = TRUE}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{xleftmargin=0em,fontsize=\small}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=0em,fontsize=\small}
-\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=0em,fontsize=\small}
-\fvset{listparameters={\setlength{\topsep}{0pt}}}
-\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
-
-
-%% Get line breaking in verbatim
-%% (from: http://newsgroups.derkeiler.com/Archive/Comp/comp.text.tex/2009-04/msg00306.html)
-\makeatletter
-\def\@xobeysp{ }
-\makeatother
-
-
-%% Get line breaking in tt
-\newcommand*\justify{%
-  \fontdimen2\font=0.4em% interword space
-  \fontdimen3\font=0.2em% interword stretch
-  \fontdimen4\font=0.1em% interword shrink
-  \fontdimen7\font=0.1em% extra space
-  \hyphenchar\font=`\-% allowing hyphenation
-}%
-
-
-%% MACROS
-\renewcommand\vec\mathbf
-\newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\var}[1]{\textit{#1}}
-\newcommand{\pkg}[1]{\textbf{#1}}
-
-
-\begin{document}
-
-\maketitle
-
-\tableofcontents\clearpage
-\listoffigures\clearpage
-
-<<sweave-setup,echo=false,results=hide>>=
+###################################################
+### code chunk number 1: sweave-setup
+###################################################
 
 options(width = 70, continue = " "#, useFancyQuotes="UTF-8"
         ,SweaveHooks=list(fig=function()
@@ -83,27 +18,11 @@ theme_set(theme_grey(base_size = 9))    # pointsize for plot text
 
 library(popReconstruct)
 
-@
-
-\section{Introduction}
-
-\pkg{popReconstruct} is a method for reconstructing populations of the recent past. It simultaneously estimates age-specific population counts, fertility rates, mortality rates and net international migration flows from fragmentary data, and  incorporates measurement error. Population dynamics over the period of reconstruction are modeled by embedding formal demographic accounting relationships in a Bayesian hierarchical model. Informative priors are required for vital rates, migration rates, population counts at baseline, and their respective measurement error variances. Inference is based on the joint posterior probability distribution which yields fully probabilistic interval estimates. A sample from this distribution is drawn using a Markov chain Monte Carlo algorithm.
-
-The \pkg{popReconstruct} package has one main function for doing the reconstruction, \code{popRecon.sampler()}. See the help file for a complete list of its arguments.
-
-This vignette demonstrates the main features of the \pkg{popReconstruct} package by reconstructing the female population of Burkina Faso from 1960--2005, as described in \citet{Wheldon_Estimating_CfSatSS2011}. Consult this reference for full details of the method and descriptions of data sources. Suggestions for summarizing and plotting results are also given by way of example.
 
 
-\section{Notation}
-\label{sec:notation}
-
-We use the symbols $n$, $s$, $g$ and $f$ to denote population counts, survival (a measure of mortality), net international migration (immigrants minus emigrants) and fertility, respectively. All of these parameters will be indexed by five-year increments of age, denoted by $a$, and time, denoted by $t$. For example, $f_{a,t}$ is the average annual age-specific fertility rate for women in the age range $[a,a+5)$ over the period $[t,t+5)$. Reconstruction will be done over the time interval $[1960,2005)$. The age scale runs from 0 to 85 for survival and 0 to 80 for all other parameters.
-
-
-\section{Doing the Reconstruction}
-\label{sec:doing-reconstruction}
-
-<<source-functions,echo=false,results=hide>>=
+###################################################
+### code chunk number 2: source-functions
+###################################################
 
 ## source(file.path(.find.package("popReconstruct"), "source"
 ##                  ,"pop_reconstruction_functions.R")
@@ -112,63 +31,36 @@ We use the symbols $n$, $s$, $g$ and $f$ to denote population counts, survival (
 ## dir(file.path(.find.package("popReconstruct"), "R", "NAMESPACE"))
 
 
-@
 
-\subsection{Initial Estimates and Census Counts}
-\label{sec:initial-estimates}
 
-<<load-burkina-data,echo=false,results=hide>>=
+###################################################
+### code chunk number 3: load-burkina-data
+###################################################
 
 ## load(file.path(.find.package("popReconstruct"), "data", "burkina_faso_females.RData"))
 data(burkina_faso_females)
 
-@
-
-Bias-reduced initial estimates of age-specific fertility rates, survival and migration proportions, population counts in the baseline year and census counts in subsequent years are required. Ideally, initial estimates will be based on data which have been pre-processed to reduce systematic biases. For example, population counts based on censuses should be adjusted to reduce bias due to undercount of certain age groups and age heaping. Similarly, fertility rate data based on surveys should be adjusted to reduce bias due to omission and misplacement of births. See \citet{Wheldon_Estimating_CfSatSS2011} for further details.
-
-Initial estimates and census counts for this vignette can be loaded by issuing the command \code{data(burkina\_\-faso\_\-females)}. This loads the object \code{burkina.faso.females}, a list with the following components: \code{fertility.rates}, \code{survival.proportions}, \code{migration.proportions}, \code{baseline.pop.counts}, and \code{census.pop.counts}. Each of these is a matrix with one row per age-group and one column per time period.
-
-The row and column names of the initial estimate matrices are important. They must indicate the start points of the age-groups and time-periods to which the corresponding matrix elements refer. The width of the age-groups and time-periods must be the same and \code{popRecon.sampler()} uses the row and column names to check this.
 
 
-\paragraph{Fertility Rates} These should be average annual age-specific fertility rates, $f_{a,t}$, over five-year age and time intervals. The rates in this matrix should not be pre-multiplied by the width of the age range; total fertility rate is $5\sum_a f_{a,t}$. Rows corresonding to ages for which fertility is assumed to be zero should contain all zeros. For Burkina Faso females, we have
-<<fert-rate-init-ests,echo=TRUE,results=verbatim>>=
+###################################################
+### code chunk number 4: fert-rate-init-ests
+###################################################
 
 burkina.faso.females$fertility.rates
 
-@
 
 
-\paragraph{Survival Proportions} The survival proportions, $s_{a,t}$, give the proportion of those aged $a-5$ to $a$ at time $t$ who survive to be aged $a$ to $a+5$ at time $t+5$. Also, $s_{80,t}$ is the proportion aged $[75,80)$ at exact time $t$ who survive to time $t+5$, by which time they are in the age group $[85,\infty)$. We allow for subsequent survival in this age group by letting $s_{85,t}$ be the proportion aged $[85,\infty)$ at time $t$ who survive five more years. The matrix of survival proportions for Burkina Faso females has the same form as the matrix of fertility rates.
-
-
-\paragraph{Migration Proportions} Net international migration, $g_{a,t}$, is measured as a proportion of the respective age-, time-specific population size. Therefore, the net number of migrants aged $[a,a+5)$ to the population during the time period $[t,t+5)$ is $g_{a,t}n_{a,t}$. The matrix of survival proportions for Burkina Faso females has the same form as the matrix of fertility rates.
-
-
-\paragraph{Population Counts at Baseline} The total number of people in each age group at the baseline year, $n_{a,t_0}$ is entered as a single column matrix. In our case,
-<<baseline-count-init-ests,echo=TRUE,results=verbatim>>=
+###################################################
+### code chunk number 5: baseline-count-init-ests
+###################################################
 
 burkina.faso.females$baseline.pop.counts
 
-@
 
 
-\paragraph{Census Counts} Bias reduced census counts are also required for at least one of the years between the baseline year and the end year. These must be at regular five-yearly intervals to coincide with the five-yearly intervals of the initial estimates. Censuses were conducted in Burkina Faso in 1975, 1985, 1995 and 2005. The census count matrix follows the same form as the fertility, survival and migration matrices.
-
-
-\subsection{MCMC Control Parameters}
-\label{sec:mcmc-parameters}
-
-The reconstruction is done by the function \code{popRecon.sampler()}. Among other arguments, this function requires the size of the MCMC sample to be specified via \code{n.iter} and the additional number of burn-in iterations via \code{burn.in}. The parameters are updated using Metropolis steps with Gaussian random walk proposals. Each age- time-specific parameter has its own proposal variance which can be modified to achieve an acceptable proportion of acceptances. The variances must be supplied via the \code{prop.vars} argument. This must be a list with components \code{fert.rate}, \code{surv.prop}, \code{mig.prop} and \code{baseline.pop.count}. Each component is a matrix with the same shape as the corresponding matrix of initial estimates (Section~\ref{sec:initial-estimates}), except for the \code{fert.rate} component. The matrix of proposal variances for fertility rates has the rows corresponding to ages of zero fertility removed. Alternatively, the elements can be a vector such that the $i$th element corresponds to the same age and time as the $i$th element of the corresponding component of \code{burkina.faso.females}, after removing rows of non-zero fertility for the fertility rate matrix. This is the same ordering achieved by applying \code{as.vector()} to the proposal variance matrices.
-
-Metropolis proposal variances for this example are in the object \code{burkina.faso.prop.vars}, loaded by \code{data(burkina-faso-females)}.
-
-
-\subsection{Calling \code{popRecon.sampler()}}
-\label{sec:call-textttp}
-
-This runs the sampler for 50000 iterations with a burn in of 500 iterations, storing every 50th:
-<<bkfas-do-the-recon,echo=true,results=hide>>=
+###################################################
+### code chunk number 6: bkfas-do-the-recon
+###################################################
 
 ## set the seed random for the random number generator
 set.seed(1)
@@ -200,135 +92,20 @@ set.seed(1)
 ## |<--- end comment
 load(file = "Burkina_Faso_Recon_RESULTS.RData")
 
-@
-
-\section{Results}
-\label{sec:results}
-
-In this section, we illustrate how the joint posterior generated by \code{popRecon.sampler()} might be summarized. \code{popRecon.sampler()} returns a list containing (among other things) the MCMC chains for each of the age-specific input parameters, namely fertility rates, survival proportions, migration proportions and the population counts at baseline. These are of class \code{mcmc} from the \pkg{coda} package.
 
 
-\subsection{Age-Specific Parameters}
-\label{sec:fertility}
-
-The marginal posterior distributions for all age-specific input parameters can be summarized by plotting upper and lower quantiles of 95 percent Bayesian confidence intervals (credible intervals) and the posterior median. These are shown in Figures~\ref{fig:bkfas-asfr-posterior-plot}--\ref{fig:bkfas-baseline-posterior-plot}. These plots are based on the \code{fert.rate.mcmc}, \code{surv.prop.mcmc}, \code{mig.prop.mcmc} and \code{baseline.count.mcmc} objects, which are components of the list returned by \code{popRecon.sampler()}. For example, the posterior quantiles plotted in the first panel of Figure~\ref{fig:bkfas-asfr-posterior-plot} are
-<<results-age-spec-fert,results=verbatim,echo=true>>=
+###################################################
+### code chunk number 7: results-age-spec-fert
+###################################################
 
 apply(BKFem.Recon.MCMC$fert.rate.mcmc, 2, "quantile", c(0.025, 0.5, 0.975))[,1:7]
 
-@
-
-R code to produce these plots is in Appendix~\ref{sec:code-produce-plots}.
 
 
-\begin{figure}[hbpt]
-\centering
-  \includegraphics{burkina-faso-females-PLOT-age-specific-fert-rate.pdf}
-\caption{Ninety-five percent Bayesian confidence intervals and posterior medians for age-specific fertility rates for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-asfr-posterior-plot}
-\end{figure}
-
-
-\begin{figure}[hbpt]
-\centering
-  \includegraphics{burkina-faso-females-PLOT-age-specific-surv-prop.pdf}
-\caption{Ninety-five percent Bayesian confidence intervals and posterior medians for age-specific survival proportions for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-assurv-posterior-plot}
-\end{figure}
-
-
-\begin{figure}[hbpt]
-\centering
-  \includegraphics{burkina-faso-females-PLOT-age-specific-mig-prop.pdf}
-\caption{Ninety-five percent Bayesian confidence intervals and posterior medians for age-specific migration proportions for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-asmig-posterior-plot}
-\end{figure}
-
-
-\begin{figure}[hbpt]
-\centering
-  \includegraphics{burkina-faso-females-PLOT-age-specific-baseline-count.pdf}
-\caption{Ninety-five percent Bayesian confidence intervals and posterior medians for age-specific baseline counts for the female population of Burkina Faso in 1960. Also shown are the initial estimates.}
-\label{fig:bkfas-baseline-posterior-plot}
-\end{figure}
-
-
-\subsection{Age-Summarized Parameters}
-\label{sec:age-summ-param}
-
-Posterior estimates for standard age-summarized parameters can also be produced. Here we show total fertility rate (TFR), life expectancy at birth ($e_0$) and total average annual net number of migrants.
-
-
-\subsubsection{Total Fertility Rate}
-\label{sec:total-fertility-rate}
-
-Total fertility rate is defined as
-\begin{equation*}
-  \text{TFR}_t = 5\sum_a f_{a,t}.
-\end{equation*}
-Ninety-five percent Bayesian confidence intervals and posterior medians are shown in Figure~\ref{fig:bkfas-tfr-plot}. These were calculated from the age-specific fertility rate MCMC, \code{BKFem.Recon.MCMC\$\-fert.rate.mcmc}, chains using the code in Appendix~\ref{sec:total-fertility-rate-1}.
-
-\begin{figure}[hbpt]
-  \centering
-  \includegraphics{burkina-faso-females-calculate-tfr-posterior.pdf}
-  \caption{Ninety-five percent Bayesian confidence intervals and posterior medians for TFR for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-tfr-plot}
-\end{figure}
-
-
-\subsubsection{Life Expectancy at Birth}
-\label{sec:life-expectancy-at}
-
-In a stationary population, the survival proportions can be converted to life expectancies at birth in each five-year period, $e_{0,t}$, by the transformation
-\begin{equation}
-  e_{0,t} = 5 \sum_{a=0}^{80} \prod_{i=0}^a s_{i,t} + \left(\prod_{i=0}^{80} s_{i,t}\right) \bigl(s_{85+,t}/(1-s_{85+,t})\bigr),
-\end{equation}
-Ninety-five percent Bayesian confidence intervals and posterior medians are shown in Figure~\ref{fig:bkfas-e0-plot}. These were calculated from the age-specific survival proportion MCMC chains, \code{BKFem.Recon.MCMC\$\-surv.prop.mcmc}, using the function \code{life.expectancy.stationary()} and the code in Appendix~\ref{sec:life-expectancy-at-1}.
-
-\begin{figure}[hbpt]
-  \centering
-  \includegraphics{burkina-faso-females-calculate-e0-posterior.pdf}
-  \caption{Ninety-five percent Bayesian confidence intervals and posterior medians for $e_0$ for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-e0-plot}
-\end{figure}
-
-
-\subsubsection{Total Average Annual Net Migration}
-\label{sec:total-average-annual}
-
-A posterior sample of total net number of migrants can be calculated using the posterior samples of the age-specific migration proportions and age-specific population counts at each five-year step within the interval of reconstruction. These can be calculated by deterministically projecting the posterior samples of age-specific fertility rates, survival proportions, migration proportions and baseline counts. The deterministic projection is done by the cohort component method of population projection (CCMPP) \citep[e.g.,][Ch.~6]{PrestonHeuvelineGuillot2001}, i.e.,
-\begin{equation}
-  \label{eq:projected-counts-tplus5-iter-k}
-  \vec{n}_{t+5}^{[k]} = L^{[k]} \cdot (\vec{n}_t^{[k]} + (1/2) \cdot \widetilde{\vec{g}}_t^{[k]} ) + (1/2) \cdot \widetilde{\vec{g}}_t^{[k]}
-\end{equation}
-where $k$ indexes elements of the posterior sample and runs from 1 to the value of \code{n.iter} passed to \code{popRecon.sampler()} (see Section~\ref{sec:doing-reconstruction}), $L$ is the Leslie matrix of the projection, $I$ is the identity matrix, and $\widetilde{\vec{g}}_t^{[k]} \equiv (\vec{g}_t^{[k]})^\prime \vec{n}_t^{[k]}$. The average annual net number of migrants for iteration $k$ over the interval $[t,t+5)$, $\widetilde{\vec{g}}_t^{[k]}$, is then the solution to (\ref{eq:projected-counts-tplus5-iter-k}):
-\begin{equation*}
-  \widetilde{\vec{g}}_t^{[k]} = 2 \cdot (L^{[k]} + I)^{-1} \cdot (n_{t+5}^{[k]} - L^{[k]} \cdot n_t^{[k]})
-\end{equation*}
-The CCMPP is implemented in the function \code{popRecon.ccmp.female}.
-
-Ninety-five percent Bayesian confidence intervals and posterior medians are shown in Figure~\ref{fig:bkfas-e0-plot}. These were calculated by the code in Appendix~\ref{sec:total-average-annual-1} which uses the posterior changes of all the input parameters, namely the components \code{fert.rate.mcmc}, \code{surv.prop.mcmc} and \code{mig.prop.mcmc} in \code{BKFem.Recon.MCMC}.
-
-\begin{figure}[hbpt]
-  \centering
-  \includegraphics{burkina-faso-females-calculate-tot-avg-ann-net-mig.pdf}
-  \caption{Ninety-five percent Bayesian confidence intervals and posterior medians for total average annual net number of migrants for the female population of Burkina Faso, 1960--2005. Also shown are the initial estimates.}
-\label{fig:bkfas-e0-plot}
-\end{figure}
-
-
-
-\clearpage
-\appendix
-
-
-\section{Code to Produce Plots of Age-Specific Parameters}
-\label{sec:code-produce-plots}
-
-\subsection{Fertility Rates}
-\label{sec:fertility-rates}
-
-<<PLOT-age-specific-fert-rate,echo=true,results=hide,fig=true,include=false,width=7,height=6.5>>=
+###################################################
+### code chunk number 8: PLOT-age-specific-fert-rate
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -423,12 +200,12 @@ print(
       ylab("fert. rate")
       )
 
-@
 
-\subsection{Survival Proportions}
-\label{sec:survival-proportions}
 
-<<PLOT-age-specific-surv-prop,echo=true,results=hide,fig=true,include=false,width=7,height=6.5>>=
+###################################################
+### code chunk number 9: PLOT-age-specific-surv-prop
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -519,12 +296,12 @@ print(
       ylab("surv. prop")
       )
 
-@
 
-\subsection{Migration Proportions}
-\label{sec:migration-proportions}
 
-<<PLOT-age-specific-mig-prop,echo=true,results=hide,fig=true,include=false,width=7,height=6.5>>=
+###################################################
+### code chunk number 10: PLOT-age-specific-mig-prop
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -615,13 +392,12 @@ print(
       ylab("mig. prop")
       )
 
-@
 
 
-\subsection{Baseline Counts}
-\label{sec:baseline-counts}
-
-<<PLOT-age-specific-baseline-count,echo=true,results=hide,fig=true,include=false,height=4,width=5>>=
+###################################################
+### code chunk number 11: PLOT-age-specific-baseline-count
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -712,16 +488,12 @@ print(
       ylab("baseline. count")
       )
 
-@
 
 
-\section{Code to Produce Plots of Age-Summarized Parameters}
-\label{sec:code-produce-plots-1}
-
-\subsection{Total Fertility Rate}
-\label{sec:total-fertility-rate-1}
-
-<<calculate-tfr-posterior,echo=true,results=verbatim,fig=true,include=false,height=4,width=5>>=
+###################################################
+### code chunk number 12: calculate-tfr-posterior
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -805,13 +577,12 @@ print(ggplot(data = plot.df, aes(x = year, y = tfr.50pctl, color = legend)) +
       ylab("total fertility rate")
       )
 
-@
 
 
-\subsection{Life Expectancy at Birth}
-\label{sec:life-expectancy-at-1}
-
-<<calculate-e0-posterior,echo=true,results=verbatim,fig=true,include=false,height=4,width=5>>=
+###################################################
+### code chunk number 13: calculate-e0-posterior
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 ######################################################################
 ###
@@ -880,13 +651,12 @@ print(ggplot(data = plot.df, aes(x = year, y = leb.50pctl, color = legend)) +
       ylab("life expectancy at birth (years)")
       )
 
-@
 
 
-\subsection{Total Average Annual Net Migration}
-\label{sec:total-average-annual-1}
-
-<<calculate-tot-avg-ann-net-mig,echo=true,results=verbatim,fig=true,include=false,height=4,width=5>>=
+###################################################
+### code chunk number 14: calculate-tot-avg-ann-net-mig
+###################################################
+getOption("SweaveHooks")[["fig"]]()
 
 #######################################################################
 ###
@@ -1072,13 +842,5 @@ print(ggplot(data = plot.df, aes(x = year
       ylab("net number of migrants (000s)")
       )
 
-@
 
 
-
-
-
-
-\bibliography{PPGpRefs}
-
-\end{document}

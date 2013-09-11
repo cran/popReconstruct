@@ -522,11 +522,6 @@ popRecon.sampler <-
     ptm <- proc.time()
 
 
-    ## --------- Libraries --------- ##
-
-    require(coda)
-
-
     ## ------ Match functions ------ ##
 
 

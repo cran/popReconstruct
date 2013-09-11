@@ -10,7 +10,13 @@ age-specific fertility rates, survival and migration proportions and
 baseline population counts.
 }
 \usage{
-popRecon.sampler(n.iter, burn.in = 0, thin.by = 1, al.f = 1, be.f = 0.0109, al.s = 1, be.s = 0.0109, al.g = 1, be.g = 0.0436, al.n = 1, be.n = 0.0109, mean.f, mean.s, mean.g, mean.b, start.f = mean.f, start.s = mean.s, start.g = mean.g, start.b = mean.b, start.sigmasq.f = 5, start.sigmasq.s = 5, start.sigmasq.g = 5, start.sigmasq.n = 5, pop.data, prop.vars, ccmp.function = popRecon.ccmp.female, proj.periods = ncol(mean.f), age.size = 5, verb = FALSE, s.tol = 10^(-10))
+popRecon.sampler(n.iter, burn.in = 0, thin.by = 1, al.f = 1, be.f = 0.0109,
+al.s = 1, be.s = 0.0109, al.g = 1, be.g = 0.0436, al.n = 1, be.n = 0.0109,
+mean.f, mean.s, mean.g, mean.b, start.f = mean.f, start.s = mean.s,
+start.g = mean.g, start.b = mean.b, start.sigmasq.f = 5, start.sigmasq.s = 5,
+start.sigmasq.g = 5, start.sigmasq.n = 5, pop.data, prop.vars,
+ccmp.function = popRecon.ccmp.female, proj.periods = ncol(mean.f),
+age.size = 5, verb = FALSE, s.tol = 10^(-10))
 }
 \arguments{
   \item{n.iter}{
