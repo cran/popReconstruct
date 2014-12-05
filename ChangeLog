@@ -1,3 +1,11 @@
+Version 1.0-4
+-------------
+Changes to DESCRIPTION file to comply with CRAN policies.
+
+Version 1.0-3
+-------------
+Very minor changes to comply with new CRAN policies.
+
 Version 1.0-2
 -------------
 Run time of tests reduced. 

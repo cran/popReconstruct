@@ -1,7 +1,8 @@
-060fed6c6c0303370e743453387fb9ac *ChangeLog
-1078c1a327ef94950fffc9bd20beb6a2 *DESCRIPTION
+1aeb5b2e070e73adec870e5822b78a2f *ChangeLog
+c78b4be41d88db87e7dff9569af684b3 *DESCRIPTION
 96963ca92ab3e6e39bdceabb922e4224 *NAMESPACE
 4abfb46338ca198be5d247842578a9e3 *R/pop_reconstruction_functions.R
+49db7bbe9dfc4d362c4de7fbffc71fca *build/vignette.rds
 85011de88e1b0c6b2165254a0db09973 *data/burkina_faso_females.RData
 c0ac4b89ef4ad21901ebf9f683d3f451 *inst/doc/burkina-faso-females.R
 876e073df8120c0f1dc03f8293e929fc *inst/doc/burkina-faso-females.Rnw
