@@ -28,7 +28,7 @@
 \bibliographystyle{apa}
 
 %% Sweave
-\usepackage[nogin]{Sweave}
+\usepackage[nogin,noae]{Sweave}
 \SweaveOpts{keep.source = TRUE}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{xleftmargin=0em,fontsize=\small}
 \DefineVerbatimEnvironment{Soutput}{Verbatim}{xleftmargin=0em,fontsize=\small}
