@@ -1,13 +1,13 @@
-a2087635af07fe50c4ad6e87c2c0a6d9 *DESCRIPTION
+11cf7e9aaa90285d3a1e098b9795acb1 *DESCRIPTION
 22c3e5d49016f39856f9c2366621a180 *NAMESPACE
 4abfb46338ca198be5d247842578a9e3 *R/pop_reconstruction_functions.R
-8da3733d1fed6c9c9789d6bbc7a0e84b *README/README.md
-a3a29148b57ab71c02ef3d79c3763ac9 *build/partial.rdb
-3b5d2c12233a774a4c2ba2ac2282aedb *build/vignette.rds
+efe4c2d2dad0dfb17e0ba39c83fcf435 *README/README.md
+5fdb8041de3285a4a7a32ad19193bddb *build/partial.rdb
+6ef08d038f632d220bba776f1b944222 *build/vignette.rds
 85011de88e1b0c6b2165254a0db09973 *data/burkina_faso_females.RData
-e9f6f4e13fa738f7f3e938954db963a9 *inst/doc/burkina-faso-females.R
-cad36cf5810a4b3e337fc8bfea856bb8 *inst/doc/burkina-faso-females.Rnw
-9f3f9fcb6ed7337ef6a6eac205f9cedf *inst/doc/burkina-faso-females.pdf
+c0ac4b89ef4ad21901ebf9f683d3f451 *inst/doc/burkina-faso-females.R
+3a0fefddb215f02205d3a8f76b4f29b2 *inst/doc/burkina-faso-females.Rnw
+b13c512c475d7523b816891ee9fab4ef *inst/doc/burkina-faso-females.pdf
 1e94f6c3a86ead67c7716f0f5e9fe318 *man/acc.ra.mar29.Rd
 2e07e41aef02020954219b2defe979c0 *man/acc.ra.var.mar29.Rd
 59788da853bd608b0de6c4bcb808cb45 *man/burkina_faso_females.RData.Rd
@@ -28,5 +28,4 @@ bab606e51602e1ffaa8403763d99244f *man/proj.cen.yrs.Rd
 551ac94f4a870f601657ab78a5586319 *tests/run_tests.R
 57e860fdae48a401f16bae18ecfd1a3a *tests/test_functions.R
 e7ac980f00a0c66e25acd73e6f8c3fd3 *vignettes/Burkina_Faso_Recon_RESULTS.RData
-ff4fd185312a93e3eb67a827c4894658 *vignettes/PPGpRefs.bib
-cad36cf5810a4b3e337fc8bfea856bb8 *vignettes/burkina-faso-females.Rnw
+3a0fefddb215f02205d3a8f76b4f29b2 *vignettes/burkina-faso-females.Rnw

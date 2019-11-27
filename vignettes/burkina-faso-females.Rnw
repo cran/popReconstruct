@@ -20,13 +20,6 @@
 \usepackage[hyperref,table,fixpdftex,svgnames]{xcolor}
 \usepackage[pdftex,bookmarks,colorlinks,allcolors=DarkBlue]{hyperref}
 
-%% Bibliography
-\usepackage[round,longnamesfirst]{natbib}
-%\renewcommand{\bibsection}{\section*{REFERENCES}}
-\bibpunct{(}{)}{;}{a}{}{,}
-\citestyle{agsm}
-\bibliographystyle{apa}
-
 %% Sweave
 \usepackage[nogin,noae]{Sweave}
 \SweaveOpts{keep.source = TRUE}
@@ -91,7 +84,7 @@ library(popReconstruct)
 
 The \pkg{popReconstruct} package has one main function for doing the reconstruction, \code{popRecon.sampler()}. See the help file for a complete list of its arguments.
 
-This vignette demonstrates the main features of the \pkg{popReconstruct} package by reconstructing the female population of Burkina Faso from 1960--2005, as described in \citet{Wheldon_Estimating_CfSatSS2011}. Consult this reference for full details of the method and descriptions of data sources. Suggestions for summarizing and plotting results are also given by way of example.
+This vignette demonstrates the main features of the \pkg{popReconstruct} package by reconstructing the female population of Burkina Faso from 1960--2005, as described in Wheldon et al.~(2011). Consult this reference for full details of the method and descriptions of data sources. Suggestions for summarizing and plotting results are also given by way of example.
 
 
 \section{Notation}
@@ -124,7 +117,7 @@ data(burkina_faso_females)
 
 @
 
-Bias-reduced initial estimates of age-specific fertility rates, survival and migration proportions, population counts in the baseline year and census counts in subsequent years are required. Ideally, initial estimates will be based on data which have been pre-processed to reduce systematic biases. For example, population counts based on censuses should be adjusted to reduce bias due to undercount of certain age groups and age heaping. Similarly, fertility rate data based on surveys should be adjusted to reduce bias due to omission and misplacement of births. See \citet{Wheldon_Estimating_CfSatSS2011} for further details.
+Bias-reduced initial estimates of age-specific fertility rates, survival and migration proportions, population counts in the baseline year and census counts in subsequent years are required. Ideally, initial estimates will be based on data which have been pre-processed to reduce systematic biases. For example, population counts based on censuses should be adjusted to reduce bias due to undercount of certain age groups and age heaping. Similarly, fertility rate data based on surveys should be adjusted to reduce bias due to omission and misplacement of births. See Wheldon et al.~(2011) for further details.
 
 Initial estimates and census counts for this vignette can be loaded by issuing the command \code{data(burkina\_\-faso\_\-females)}. This loads the object \code{burkina.faso.females}, a list with the following components: \code{fertility.rates}, \code{survival.proportions}, \code{migration.proportions}, \code{baseline.pop.counts}, and \code{census.pop.counts}. Each of these is a matrix with one row per age-group and one column per time period.
 
@@ -296,7 +289,7 @@ Ninety-five percent Bayesian confidence intervals and posterior medians are show
 \subsubsection{Total Average Annual Net Migration}
 \label{sec:total-average-annual}
 
-A posterior sample of total net number of migrants can be calculated using the posterior samples of the age-specific migration proportions and age-specific population counts at each five-year step within the interval of reconstruction. These can be calculated by deterministically projecting the posterior samples of age-specific fertility rates, survival proportions, migration proportions and baseline counts. The deterministic projection is done by the cohort component method of population projection (CCMPP) \citep[e.g.,][Ch.~6]{PrestonHeuvelineGuillot2001}, i.e.,
+A posterior sample of total net number of migrants can be calculated using the posterior samples of the age-specific migration proportions and age-specific population counts at each five-year step within the interval of reconstruction. These can be calculated by deterministically projecting the posterior samples of age-specific fertility rates, survival proportions, migration proportions and baseline counts. The deterministic projection is done by the cohort component method of population projection (CCMPP) (e.g., Preston et al., 2001, Ch.~6), i.e.,
 \begin{equation}
   \label{eq:projected-counts-tplus5-iter-k}
   \vec{n}_{t+5}^{[k]} = L^{[k]} \cdot (\vec{n}_t^{[k]} + (1/2) \cdot \widetilde{\vec{g}}_t^{[k]} ) + (1/2) \cdot \widetilde{\vec{g}}_t^{[k]}
@@ -1079,6 +1072,14 @@ print(ggplot(data = plot.df, aes(x = year
 
 
 
-\bibliography{PPGpRefs}
+\section*{References}
+
+Preston, S.~H., Heuveline, P., and Guillot, M. (2001). {\em Demography: Measuring and Modeling Population Processes}. Blackwell, Malden, Massachusetts.
+
+\mbox{}
+
+\noindent Wheldon, M.~C., Raftery, A.~E., Clark, S.~J., and Gerland, P. (2011).
+Estimating demographic parameters with uncertainty from fragmentary data. Working Paper 108, Center for Statistics and the Social Sciences, University of Washington, Seattle, Washington.
+
 
 \end{document}

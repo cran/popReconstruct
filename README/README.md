@@ -1,6 +1,13 @@
 Version 1.0-5
 =============
 
+* Remove dependence on asa.bst to comply with CRAN request.
+* Processed vignette files (.Rnw, .R, .pdf) removed from doc/. 
+
+
+Version 1.0-5
+=============
+
 * Update package documentation file to comply with CRAN policies.
 * Update references in DESCRIPTION and pacakge documentation files.
 * File 'ChangeLog' replaced with this file; previous contents copied over.
@@ -8,7 +15,7 @@ Version 1.0-5
 Version 1.0-4
 =============
 
-* hanges to DESCRIPTION file to comply with CRAN policies.
+* Changes to DESCRIPTION file to comply with CRAN policies.
 
 Version 1.0-3
 =============
